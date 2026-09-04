@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "protocol_id": "switchdoor-three-level-generator-v1",
+  "task": {
+    "levels_per_episode": 3,
+    "level_sizes": [7, 7, 11],
+    "shared_hidden_factor": "switch_mapping",
+    "switch_mapping_values": ["same_color", "cross_color"],
+    "door_response": "open_only",
+    "actions": ["MOVE_UP", "MOVE_DOWN", "MOVE_LEFT", "MOVE_RIGHT", "INTERACT"],
+    "model_visible_observation_fields": [
+      "rgb_frame",
+      "available_actions",
+      "status",
+      "previous_action"
+    ]
+  },
+  "generation": {
+    "default_episode_roots": 1,
+    "layout_randomization": "independent_d4_transform_per_level",
+    "level_1_probe_switch": "red",
+    "paired_rule_twins_supported": true
+  },
+  "render": {
+    "resolution": 448,
+    "png_compression_level": 9,
+    "palette": {
+      "background": [236, 236, 232],
+      "floor": [240, 239, 233],
+      "wall": [48, 52, 58],
+      "grid_line": [207, 205, 198],
+      "dark": [44, 48, 52],
+      "red": [184, 93, 93],
+      "blue": [91, 121, 167],
+      "goal": [111, 156, 118],
+      "agent": [217, 173, 57]
+    }
+  },
+  "levels": [
+    {
+      "level_id": "L1",
+      "purpose": "discover_switch_mapping",
+      "grid_size": 7,
+      "oracle_policy": "probe_red_then_reach_goal",
+      "template": [
+        "#######",
+        "#..G..#",
+        "#R###B#",
+        "#.....#",
+        "#..r..#",
+        "#..A.b#",
+        "#######"
+      ]
+    },
+    {
+      "level_id": "L2",
+      "purpose": "apply_mapping_to_required_red_door",
+      "grid_size": 7,
+      "oracle_policy": "shortest_goal_plan",
+      "template": [
+        "#######",
+        "#..G#.#",
+        "###R#B#",
+        "#.....#",
+        "#.....#",
+        "#r.A.b#",
+        "#######"
+      ]
+    },
+    {
+      "level_id": "L3",
+      "purpose": "apply_mapping_on_larger_layout",
+      "grid_size": 11,
+      "oracle_policy": "shortest_goal_plan",
+      "template": [
+        "###########",
+        "#....G#...#",
+        "#####R##B##",
+        "#.........#",
+        "#.###.###.#",
+        "#...#.#...#",
+        "#.#.#.#.#.#",
+        "#.#.....#.#",
+        "#..r.A.b..#",
+        "#.........#",
+        "###########"
+      ]
+    }
+  ]
+}

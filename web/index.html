@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111511">
+    <title>SwitchDoor / 三关规则实验台</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#experiment-board">跳到实验画面</a>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <div class="identity">
+        <span class="identity-mark" aria-hidden="true">SD</span>
+        <div>
+          <p class="eyebrow">RULE INFERENCE BENCH / UNIT 03</p>
+          <h1>三关规则实验台</h1>
+        </div>
+      </div>
+      <div class="system-state" aria-label="系统状态">
+        <span class="pulse" aria-hidden="true"></span>
+        <span>LIVE ENVIRONMENT</span>
+        <time id="clock" datetime="">--:--:--</time>
+      </div>
+    </header>
+
+    <main class="console-shell">
+      <section class="setup-strip" aria-labelledby="setup-title">
+        <div class="section-code" aria-hidden="true">A / SESSION</div>
+        <div class="setup-copy">
+          <h2 id="setup-title">实验设置</h2>
+          <p>默认盲测会随机隐藏开关规则；固定规则仅用于熟悉仪器。</p>
+        </div>
+        <label class="field">
+          <span>规则模式</span>
+          <select id="mapping-select">
+            <option value="random" selected>随机隐藏 · 正式体验</option>
+            <option value="same_color">固定同色 · 练习</option>
+            <option value="cross_color">固定异色 · 练习</option>
+          </select>
+        </label>
+        <label class="field seed-field">
+          <span>ROOT SEED · 可选</span>
+          <input id="seed-input" type="number" inputmode="numeric" placeholder="自动生成">
+        </label>
+        <button id="new-session" class="button button-primary" type="button">
+          <span>启动新回合</span>
+          <span aria-hidden="true">↻</span>
+        </button>
+      </section>
+
+      <div class="instrument-grid">
+        <section class="viewport-module" id="experiment-board" aria-labelledby="viewport-title">
+          <div class="module-head">
+            <div>
+              <p class="module-kicker">MODEL-VISIBLE FEED</p>
+              <h2 id="viewport-title">当前 RGB 观察</h2>
+            </div>
+            <div class="feed-badge"><span aria-hidden="true"></span>PIXEL ONLY</div>
+          </div>
+
+          <div class="viewport-bezel">
+            <div class="scanline" aria-hidden="true"></div>
+            <img id="frame" alt="SwitchDoor 当前关卡的 RGB 观察" draggable="false">
+            <div id="loading-screen" class="loading-screen" role="status">
+              <span class="loader" aria-hidden="true"></span>
+              <span>正在校准环境…</span>
+            </div>
+            <div class="corner corner-a" aria-hidden="true"></div>
+            <div class="corner corner-b" aria-hidden="true"></div>
+            <div class="corner corner-c" aria-hidden="true"></div>
+            <div class="corner corner-d" aria-hidden="true"></div>
+          </div>
+
+          <div class="observation-tape" aria-label="模型可见字段">
+            <div>
+              <span class="tape-label">STATUS</span>
+              <strong id="status-value">—</strong>
+            </div>
+            <div>
+              <span class="tape-label">PREVIOUS ACTION</span>
+              <strong id="previous-action">NONE</strong>
+            </div>
+            <div>
+              <span class="tape-label">AVAILABLE ACTIONS</span>
+              <strong id="action-count">5</strong>
+            </div>
+          </div>
+          <p class="boundary-note">
+            虚线以内对应模型观察边界：图像、状态、可用动作、上一步动作。
+            关卡号、seed 与完成信号属于运行器管理信息。
+          </p>
+        </section>
+
+        <aside class="runner-module" aria-labelledby="runner-title">
+          <div class="module-head compact">
+            <div>
+              <p class="module-kicker amber">RUNNER / PRIVATE CONTROL</p>
+              <h2 id="runner-title">回合控制台</h2>
+            </div>
+          </div>
+
+          <ol class="level-rail" aria-label="三关进度">
+            <li class="level-node current" data-level="1">
+              <span class="level-number">01</span>
+              <span><strong>发现</strong><small>辨认隐藏映射</small></span>
+            </li>
+            <li class="level-node" data-level="2">
+              <span class="level-number">02</span>
+              <span><strong>应用</strong><small>抵达红门后目标</small></span>
+            </li>
+            <li class="level-node" data-level="3">
+              <span class="level-number">03</span>
+              <span><strong>迁移</strong><small>更大布局中的规则复用</small></span>
+            </li>
+          </ol>
+
+          <dl class="telemetry">
+            <div><dt>LEVEL</dt><dd id="level-value">L1 / 3</dd></div>
+            <div><dt>MODE</dt><dd id="mode-value">BLIND</dd></div>
+            <div><dt>ACTIONS</dt><dd id="runner-actions">0</dd></div>
+            <div><dt>ROOT SEED</dt><dd id="root-seed">—</dd></div>
+          </dl>
+
+          <section class="mission-card" aria-labelledby="mission-title">
+            <p class="card-index">CURRENT OBJECTIVE</p>
+            <h3 id="mission-title">观察、行动、读取真实反馈</h3>
+            <p id="mission-copy">规则不会显示在画面上。利用开关与门的变化建立判断。</p>
+          </section>
+
+          <section id="reveal-card" class="reveal-card" aria-live="polite" hidden>
+            <p class="card-index">EPISODE COMPLETE / RULE REVEAL</p>
+            <p class="rule-symbol" id="rule-symbol" aria-hidden="true">=?</p>
+            <h3 id="rule-title">隐藏规则已揭示</h3>
+            <p id="rule-copy"></p>
+          </section>
+        </aside>
+      </div>
+
+      <section class="control-deck" aria-labelledby="controls-title">
+        <div class="deck-intro">
+          <div class="section-code" aria-hidden="true">B / INPUT</div>
+          <div>
+            <h2 id="controls-title">动作控制</h2>
+            <p>方向键或 WASD 移动，空格键执行交互。</p>
+          </div>
+        </div>
+
+        <div class="direction-pad" aria-label="移动控制">
+          <button class="control-key key-up" type="button" data-action="MOVE_UP" aria-label="向上移动">
+            <span aria-hidden="true">↑</span><small>W</small>
+          </button>
+          <button class="control-key key-left" type="button" data-action="MOVE_LEFT" aria-label="向左移动">
+            <span aria-hidden="true">←</span><small>A</small>
+          </button>
+          <button class="control-key key-down" type="button" data-action="MOVE_DOWN" aria-label="向下移动">
+            <span aria-hidden="true">↓</span><small>S</small>
+          </button>
+          <button class="control-key key-right" type="button" data-action="MOVE_RIGHT" aria-label="向右移动">
+            <span aria-hidden="true">→</span><small>D</small>
+          </button>
+        </div>
+
+        <button class="interact-key" type="button" data-action="INTERACT">
+          <span class="interact-icon" aria-hidden="true">◎</span>
+          <span><strong>INTERACT</strong><small>SPACE / 在开关上执行</small></span>
+        </button>
+
+        <div class="advance-zone">
+          <p id="control-hint">仪器已连接，等待动作输入。</p>
+          <button id="advance-level" class="button button-advance" type="button" hidden>
+            进入下一关 <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div id="announcement" class="sr-only" aria-live="assertive"></div>
+    <div id="toast" class="toast" role="alert" hidden></div>
+    <noscript>此体验需要 JavaScript 才能发送动作并读取环境反馈。</noscript>
+  </body>
+</html>

@@ -1,13 +1,13 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "switchdoor-env"
-version = "0.1.0"
-description = "A deterministic visual environment for hidden-rule induction"
+name = "switchdoor-three-level"
+version = "0.2.0"
+description = "Deterministic three-level SwitchDoor environment and data generator"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 authors = [{name = "SwitchDoor contributors"}]
 classifiers = [
@@ -22,22 +22,32 @@ dependencies = []
 [project.optional-dependencies]
 test = ["pytest>=8", "ruff>=0.9"]
 
+[project.urls]
+Repository = "https://github.com/zixuangui-rgb/SwitchDoor"
+
 [project.scripts]
-switchdoor = "switchdoor.cli:main"
+switchdoor-three-level = "switchdoor_three_level.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-switchdoor = ["py.typed"]
+[tool.setuptools.data-files]
+"share/switchdoor-three-level/config" = ["config/experiment.json"]
+"share/switchdoor-three-level/web" = [
+  "web/index.html",
+  "web/styles.css",
+  "web/app.js",
+  "web/favicon.svg",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--import-mode=importlib"
+addopts = "-q"
+pythonpath = ["src"]
 
 [tool.ruff]
-line-length = 88
-target-version = "py310"
+line-length = 100
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "SIM", "RUF"]
